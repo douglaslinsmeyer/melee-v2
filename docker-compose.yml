@@ -1,0 +1,51 @@
+version: "3"
+
+networks:
+  meleenet:
+    driver: bridge
+
+services:
+  webservice:
+    build:
+      context: ./webservice
+      dockerfile: Dockerfile
+    image: melee-v2-webservice:1.0.0
+    container_name: melee-v2-webservice
+    restart: unless-stopped
+    volumes: 
+      - ./webservice:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8000:8000
+    command: npm start
+    networks:
+      - meleenet
+
+  website:
+    build:
+      context: ./website
+      dockerfile: Dockerfile
+    image: melee-v2-website:1.0.0
+    container_name: melee-v2-website
+    restart: unless-stopped
+    volumes: 
+      - ./website:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:8000
+    command: npm start
+  
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_USER: meleeuser
+      MYSQL_PASSWORD: meleepass
+      MYSQL_DATABASE: melee
+    ports:
+      - "3306:3306"
+    networks:
+      - meleenet
