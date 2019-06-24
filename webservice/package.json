@@ -1,19 +1,37 @@
 {
   "name": "melee-v2-webservice",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Melee game version 2.",
+  "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/nodemon --inspect=0.0.0.0 index.js",
-    "start:prod": "node index.js"
+    "start:prod": "node dist/main.js",
+    "start": "./node_modules/.bin/npm-run-all --parallel watch:build watch:server",
+    "build": "./node_modules/.bin/webpack --config webpack.config.js --mode development",
+    "watch:server": "./node_modules/.bin/nodemon ./dist/main.js -L --ignore src/",
+    "watch:build": "./node_modules/.bin/webpack --watch --config webpack.config.js --mode development"
   },
-  "author": "",
+  "author": "Douglas Linsmeyer",
   "license": "MIT",
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "accesscontrol": "^2.2.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "mysql": "^2.17.1"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-loader": "^8.0.6",
+    "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-node-externals": "^1.7.2"
   }
 }

@@ -4,6 +4,9 @@ networks:
   meleenet:
     driver: bridge
 
+volumes:
+  db-data:
+
 services:
   webservice:
     build:
@@ -12,12 +15,16 @@ services:
     image: melee-v2-webservice:1.0.0
     container_name: melee-v2-webservice
     restart: unless-stopped
+    env_file: .env
     volumes: 
       - ./webservice:/usr/src/app
-      - /usr/src/app/node_modules
     ports:
       - 8000:8000
-    command: npm start
+    command: npm run start
+    depends_on:
+      - db
+    links:
+      - db
     networks:
       - meleenet
 
@@ -30,22 +37,19 @@ services:
     restart: unless-stopped
     volumes: 
       - ./website:/usr/src/app
-      - /usr/src/app/node_modules
     ports:
       - 8080:8000
-    command: npm start
+    command: npm run start
   
   db:
-    image: mysql
+    image: mongo
+    container_name: melee-v2-db
     restart: always
+    env_file: .env
     volumes:
-      - ./mysql:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: toor
-      MYSQL_USER: meleeuser
-      MYSQL_PASSWORD: meleepass
-      MYSQL_DATABASE: melee
+      - db-data:/data/db
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
     ports:
-      - "3306:3306"
+      - 27017:27017
     networks:
       - meleenet
