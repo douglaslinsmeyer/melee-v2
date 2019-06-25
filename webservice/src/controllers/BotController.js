@@ -18,9 +18,10 @@ controller.update = async (req, res) => {
         if (!botPermitter.canUpdate(bot, req.user)) {
             res.status(401).send('Unauthorized.');
         }
+        
         res.send(bot);
     } catch (err) {
-        console.log(err)
+        console.log(err);
         res.status(400).send({ error: "Server error, update failed.", });
     }
 };
@@ -31,6 +32,10 @@ controller.create = (req, res) => {
         url: req.body.url,
         owner: req.user.id,
     });
+
+    if (!botPermitter.canCreate(bot, req.user)) {
+        res.status(401).send('Unauthorized.');
+    }
 
     bot.save(err => {
         if (err) {
