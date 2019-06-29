@@ -130,7 +130,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _mod
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _combat_combatManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../combat/combatManager */ \"./src/combat/combatManager.js\");\n\nvar controller = {};\n\ncontroller.start = function (req, res) {\n  var combatManager = new _combat_combatManager__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\n  combatManager.registerVictoryCondition('Last Man Standing', function (matchObject) {\n    for (var i = 0; i < matchObject.combatants.length; i++) {}\n  });\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (controller);\n\n//# sourceURL=webpack:///./src/controllers/gameController.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _combat_combatManager__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../combat/combatManager */ \"./src/combat/combatManager.js\");\n\nvar combatManager = new _combat_combatManager__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\ncombatManager.registerVictoryCondition('Last Man Standing', function (matchObject) {\n  var remainingCombatants = matchObject.combatants.filter(function (combatant) {\n    return combatant.health > 0;\n  });\n\n  if (remainingCombatants.length === 1) {\n    return remainingCombatants[0];\n  }\n\n  return false;\n});\nvar controller = {};\n\ncontroller.start = function (req, res) {};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (controller);\n\n//# sourceURL=webpack:///./src/controllers/gameController.js?");
 
 /***/ }),
 
