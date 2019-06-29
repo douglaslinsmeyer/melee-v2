@@ -1,12 +1,7 @@
 import CombatManager from '../combat/combatManager';
 
-
-
-
-
-
 let combatManager = new CombatManager();
-combatManager.registerVictoryCondition('Last Man Standing', matchObject => {
+combatManager.registerVictoryCondition('Last Man Standing', matchObject    => {
     const remainingCombatants = matchObject.combatants.filter(combatant => {
         return combatant.health > 0;
     });
