@@ -53,3 +53,12 @@ services:
       - 27017:27017
     networks:
       - meleenet
+  db-client:
+    image: mongo-express
+    container_name: melee-v2-db-gui
+    restart: always
+    env_file: .env
+    ports:
+      - "8081:8081"
+    networks:
+      - meleenet
