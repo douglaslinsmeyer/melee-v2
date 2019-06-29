@@ -11,6 +11,7 @@ export default mongoose.model('Bot', new mongoose.Schema({
         lowercase: true,
         required: true,
     },
+    avatar: String,
     owner: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
