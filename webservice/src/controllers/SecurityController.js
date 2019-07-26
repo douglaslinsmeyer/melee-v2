@@ -6,7 +6,7 @@ const controller = {};
 
 controller.authenticate = async (req, res) => {
     let sendUnauthorizedResponse = () => {
-        res.status(401).send('Authentication failed.');
+        return res.status(401).send('Authentication failed.');
     };
 
     if (!req.body.hasOwnProperty('email') || !req.body.hasOwnProperty('password')) {
@@ -17,14 +17,15 @@ controller.authenticate = async (req, res) => {
     if (!user) {
         sendUnauthorizedResponse();
     }
-    
+
     let passwordMatches = await bcrypt.compare(req.body.password, user.password);
     if (false === passwordMatches) {
         sendUnauthorizedResponse();
     }
-    
+
     const token = jwt.sign({ data: { email: req.body.email, }, }, process.env.APP_SECRET, { expiresIn: "24h", });
-    res.status(200).send({ token: token, });
+
+    return res.status(200).send({ token: token, });
 };
 
 controller.register = async (req, res) => {
@@ -38,13 +39,13 @@ controller.register = async (req, res) => {
 
     try {
         user = await user.save();
-        res.status(201).send(user);
+        return res.status(201).send(user);
     } catch (err) {
         if (err.name === 'MongoError' && err.code === 11000) {
-            res.status(409).send({ error: "That email address is already registered.", });
+            return res.status(409).send({ error: "That email address is already registered.", });
         }
 
-        res.status(500).send(err);
+        return res.status(500).send(err);
     }
 };
 

@@ -2,6 +2,7 @@ import AccessControl from 'accesscontrol';
 import { BasePermitter } from './permitters/basePermitter';
 import { BotPermitter } from './permitters/botPermitter';
 import { UserPermitter } from './permitters/userPermitter';
+import logger from '../../logger';
 
 const permissions = {
     admin: {
@@ -62,7 +63,7 @@ class Permitter {
             }
         }
 
-        console.log(`There is no permitter for "${modelName}".`);
+        logger.log('info', `There is no permitter for "${modelName}".`);
     }
 }
 

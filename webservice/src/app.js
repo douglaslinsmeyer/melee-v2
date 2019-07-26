@@ -6,14 +6,16 @@ import db from './database';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import securityStrategy from './security';
+import logger from './logger';
+
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config({
         path: '../',
-    });         
+    });
 }
 
-console.log(`Running in >>${process.env.NODE_ENV}<< mode.`);
+logger.log('info', `Running in >>${process.env.NODE_ENV}<< mode.`);
 
 const app = express();
 const port = 8000;
@@ -29,5 +31,5 @@ app.use(bodyParser.urlencoded({ extended: false, }));
 app.use('/', routes);
 
 app.listen(port, () => {
-    console.log(`Server running on port: ${port}`); 
+    logger.log('info', `Server running on port: ${port}`);
 });
