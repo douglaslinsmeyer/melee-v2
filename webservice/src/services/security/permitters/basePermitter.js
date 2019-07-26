@@ -1,5 +1,21 @@
 import logger from '../../../logger';
 
+const permissionCheckingMessage = (action, userName, own, object, role) => {
+    return `[SECURITY]: Checking permission of [${userName}] to ${action} [${ (own) ? 'own' : 'not own' }] [${object}] with role [${role}]...`;
+};
+
+const permissionGrantedByRoleMessage = (action, userName, own, object, role) => {
+    return `[SECURITY]: Permission to ${action} [${ (own) ? 'own' : 'not own' }] [${object}] granted to [${userName}] by role [${role}].`;
+};
+
+const permissionDeniedByRoleMessage = (action, userName, own, object, role) => {
+    return `[SECURITY]: Permission to ${action} [${ (own) ? 'own' : 'not own' }] [${object}] denied to [${userName}] by role [${role}].`;
+};
+
+const permissionDeniedMessage = (action, userName, own) => {
+    return `[SECURITY]: Permission to ${action} [${ (own) ? 'own' : 'not own' }] [${this.key}] denied for [${userName}].`;
+};
+
 export class BasePermitter {
 
     constructor(key, ac) {
@@ -15,16 +31,16 @@ export class BasePermitter {
         for(let i=0; i < user.roles.length; i++) {
             let role = user.roles[i];
             let permission = (this.isOwn(obj, user)) ? this.ac.can(role).createOwn(this.key) : this.ac.can(role).createAny(this.key);
-            logger.log('info', `[SECURITY]: Checking permission for [${user.name}] to create [${ (this.isOwn(obj, user)) ? 'own' : 'not own' }] [${this.key}] with role [${role}]...`);
+            logger.log('info', permissionCheckingMessage('create', user.name, this.isOwn(obj, user), this.key, role));
             if (permission.granted) {
-                logger.log('info', `[SECURITY]: Permission to create [${this.key}] granted by role [${role}] for [${user.name}].`);
+                logger.log('info', permissionGrantedByRoleMessage('create', user.name, this.isOwn(obj, user), this.key, role));
                 return true;
             } else {
-                logger.log('info', `[SECURITY]: Permission to create [${this.key}] with role [${role}] denied for [${user.name}].`);
+                logger.log('info', permissionDeniedByRoleMessage('create', user.name, this.isOwn(obj, user), this.key, role));
             }
         }
 
-        logger.log('info', `[SECURITY]: Permission to create [${this.key}] denied for [${user.name}].`);
+        logger.log('info', permissionDeniedMessage('create', user.name, this.isOwn(obj, user), this.key));
         return false;
     }
 
@@ -32,15 +48,16 @@ export class BasePermitter {
         for(let i=0; i < user.roles.length; i++) {
             let role = user.roles[i];
             let permission = (this.isOwn(obj, user)) ? this.ac.can(role).readOwn(this.key) : this.ac.can(role).readAny(this.key);
-            logger.log('info', `[SECURITY]: Checking permission for [${user.name}] to read [${ (this.isOwn(obj, user)) ? 'own' : 'not own' }] [${this.key}] with role [${role}]...`);
+            logger.log('info', permissionCheckingMessage('read', user.name, this.isOwn(obj, user), this.key, role));
             if (permission.granted) {
+                logger.log('info', permissionGrantedByRoleMessage('read', user.name, this.isOwn(obj, user), this.key, role));
                 return true;
             } else {
-                logger.log('info', `[SECURITY]: Permission to read [${this.key}] with role [${role}] denied for [${user.name}].`);
+                logger.log('info', permissionDeniedByRoleMessage('read', user.name, this.isOwn(obj, user), this.key, role));
             }
         }
 
-        logger.log('info', `[SECURITY]: Permission to read [${this.key}] denied for [${user.name}].`);
+        logger.log('info', permissionDeniedMessage('read', user.name, this.isOwn(obj, user), this.key));
         return false;
     }
 
@@ -48,15 +65,16 @@ export class BasePermitter {
         for(let i=0; i < user.roles.length; i++) {
             let role = user.roles[i];
             let permission = (this.isOwn(obj, user)) ? this.ac.can(role).updateOwn(this.key) : this.ac.can(role).updateAny(this.key);
-            logger.log('info', `[SECURITY]: Checking permission for [${user.name}] to update [${ (this.isOwn(obj, user)) ? 'own' : 'not own' }] [${this.key}] with role [${role}]...`);
+            logger.log('info', permissionCheckingMessage('update', user.name, this.isOwn(obj, user), this.key, role));
             if (permission.granted) {
+                logger.log('info', permissionGrantedByRoleMessage('update', user.name, this.isOwn(obj, user), this.key, role));
                 return true;
             } else {
-                logger.log('info', `[SECURITY]: Permission to update [${this.key}] with role [${role}] denied for [${user.name}].`);
+                logger.log('info', permissionDeniedByRoleMessage('update', user.name, this.isOwn(obj, user), this.key, role));
             }
         }
 
-        logger.log('info', `[SECURITY]: Permission to update [${this.key}] denied for [${user.name}].`);
+        logger.log('info', permissionDeniedMessage('update', user.name, this.isOwn(obj, user), this.key));
         return false;
     }
 
@@ -64,15 +82,16 @@ export class BasePermitter {
         for(let i=0; i < user.roles.length; i++) {
             let role = user.roles[i];
             let permission = (this.isOwn(obj, user)) ? this.ac.can(role).deleteOwn(this.key) : this.ac.can(role).deleteAny(this.key);
-            logger.log('info', `[SECURITY]: Checking permission for [${user.name}] to delete [${ (this.isOwn(obj, user)) ? 'own' : 'not own' }] [${this.key}] with role [${role}]...`);
+            logger.log('info', permissionCheckingMessage('delete', user.name, this.isOwn(obj, user), this.key, role));
             if (permission.granted) {
+                logger.log('info', permissionGrantedByRoleMessage('delete', user.name, this.isOwn(obj, user), this.key, role));
                 return true;
             } else {
-                logger.log('info', `[SECURITY]: Permission to delete [${this.key}] with role [${role}] denied for [${user.name}].`);
+                logger.log('info', permissionDeniedByRoleMessage('delete', user.name, this.isOwn(obj, user), this.key, role));
             }
         }
 
-        logger.log('info', `[SECURITY]: Permission to delete [${this.key}] denied for [${user.name}].`);
+        logger.log('info', permissionDeniedMessage('delete', user.name, this.isOwn(obj, user), this.key));
         return false;
     }
 }

@@ -30,7 +30,7 @@ controller.create = (req, res) => {
     let bot = new Bot({
         name: req.body.name,
         url: req.body.url,
-        owner: req.user.id,
+        owner: req.user,
     });
 
     if (!botPermitter.canCreate(bot, req.user)) {
