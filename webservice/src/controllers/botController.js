@@ -34,7 +34,7 @@ controller.create = (req, res) => {
     });
 
     if (!botPermitter.canCreate(bot, req.user)) {
-        res.status(401).send('Unauthorized.');
+        return res.status(401).send('Unauthorized.');
     }
 
     bot.save(err => {
@@ -42,7 +42,7 @@ controller.create = (req, res) => {
             res.status(400).send({ error: err.message, });
         }
         
-        res.send(bot);
+        return res.send(bot);
     });
 };
 
